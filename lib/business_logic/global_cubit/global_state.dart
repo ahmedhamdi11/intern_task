@@ -8,7 +8,11 @@ class GlobalInitial extends GlobalState {}
 // login states
 class LoginLoadingState extends GlobalState {}
 
-class LoginSuccessState extends GlobalState {}
+class LoginSuccessState extends GlobalState {
+  final LoginResponse response;
+
+  LoginSuccessState(this.response);
+}
 
 class LoginFailureState extends GlobalState {
   final String errMessage;
@@ -19,7 +23,11 @@ class LoginFailureState extends GlobalState {
 // otp states
 class OtpLoadingState extends GlobalState {}
 
-class OtpSuccessState extends GlobalState {}
+class OtpSuccessState extends GlobalState {
+  final OtpResponse response;
+
+  OtpSuccessState(this.response);
+}
 
 class OtpFailureState extends GlobalState {
   final String errMessage;

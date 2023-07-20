@@ -10,13 +10,17 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
-    Future.delayed(const Duration(seconds: 2)).then((value) {
-      var id = CacheHelper.getDataFromSharedPreference(key: 'id');
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        id == null ? '/login' : '/home',
-        (route) => false,
-      );
-    });
+
+    Future.delayed(const Duration(seconds: 2)).then(
+      (value) {
+        int? id = CacheHelper.getDataFromSharedPreference(key: 'id');
+
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          id == null ? '/login' : '/home',
+          (route) => false,
+        );
+      },
+    );
 
     return Scaffold(
       body: Container(
@@ -26,14 +30,17 @@ class SplashScreen extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
+            // background image
             SvgPicture.asset(
               'assets/images/splash_background.svg',
               fit: BoxFit.cover,
             ),
+
+            // logo iamge
             Image.asset(
               'assets/images/logo.png',
               width: w * 0.9,
-            )
+            ),
           ],
         ),
       ),

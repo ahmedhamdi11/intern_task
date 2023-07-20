@@ -20,20 +20,29 @@ class GlobalCubit extends Cubit<GlobalState> {
   static GlobalCubit get(context) => BlocProvider.of(context);
 
 // login
-  late LoginResponse loginRespons;
-  Future<void> loginUser(
-      {required String name, required String phoneNumber}) async {
+  Future<void> loginUser({
+    required String name,
+    required String phoneNumber,
+  }) async {
     emit(LoginLoadingState());
+
+    // create login request model to use it in the login post request
     final request = LoginRequest(name: name, phoneNumber: phoneNumber);
 
     try {
+      // login user using name and phone number that the login request provids
       final response = await DioHelper.postData(
-          url: '$kBaseURL$kVerifyPhone', body: request.toJson());
-      loginRespons = LoginResponse.fromJson(response.data);
+        url: '$kBaseURL$kVerifyPhone',
+        body: request.toJson(),
+      );
+
+      // pass the response to the login response model
+      LoginResponse loginRespons = LoginResponse.fromJson(response.data);
+
       if (loginRespons.status == 200) {
-        emit(LoginSuccessState());
+        emit(LoginSuccessState(loginRespons));
       } else {
-        emit(LoginFailureState(loginRespons.message ?? 'faild to login'));
+        emit(LoginFailureState(loginRespons.message));
       }
     } catch (e) {
       if (e is DioError) {
@@ -45,25 +54,32 @@ class GlobalCubit extends Cubit<GlobalState> {
   }
 
 // otp
-  String? otpField1;
-  String? otpField2;
-  String? otpField3;
-  String? otpField4;
+  late String otpField1;
+  late String otpField2;
+  late String otpField3;
+  late String otpField4;
 
-  late OtpResponse otpResponse;
-  Future<void> verifyUser(
-      {required String code, required String phoneNumber}) async {
+  Future<void> verifyUser({
+    required String code,
+    required String phoneNumber,
+  }) async {
     emit(OtpLoadingState());
+
+    // create otp request model to use it in the post request
     final request = OtpRequest(code: code, phone: phoneNumber);
 
     try {
+      // post the otp request
       final response = await DioHelper.postData(
-          url: '$kBaseURL$kOtp', body: request.toJson());
-      print(response.data);
+        url: '$kBaseURL$kOtp',
+        body: request.toJson(),
+      );
 
-      otpResponse = OtpResponse.fromJson(response.data);
+      // pass the response to the otp response model
+      OtpResponse otpResponse = OtpResponse.fromJson(response.data);
+
       if (otpResponse.status == 200) {
-        emit(OtpSuccessState());
+        emit(OtpSuccessState(otpResponse));
       } else {
         emit(OtpFailureState(otpResponse.message));
       }
@@ -79,29 +95,29 @@ class GlobalCubit extends Cubit<GlobalState> {
   // get products
   Future getProducts() async {
     emit(GetProductsLoadingState());
-    try {
-      var response = await DioHelper.getData(url: '$kBaseURL$kgetProducts');
-      if (response.statusCode == 200) {
-        GetProductsResponse productsResponse =
-            GetProductsResponse.fromJson(response.data);
 
-        if (productsResponse.status == 200) {
-          emit(GetProductsSuccessState(productsResponse.products!));
-        } else {
-          emit(GetProductsFailureState(
-            productsResponse.message,
-          ));
-        }
+    try {
+      // fetch the products data
+      final response = await DioHelper.getData(url: '$kBaseURL$kgetProducts');
+
+      // pass the response to the products response model
+      GetProductsResponse productsResponse =
+          GetProductsResponse.fromJson(response.data);
+
+      if (productsResponse.status == 200) {
+        emit(GetProductsSuccessState(productsResponse.products!));
       } else {
         emit(GetProductsFailureState(
-          'faild to Get Products ,status code: ${response.statusCode}',
+          productsResponse.message,
         ));
       }
     } catch (e) {
       if (e is DioError) {
-        emit(GetProductsFailureState(
-          e.message,
-        ));
+        emit(
+          GetProductsFailureState(
+            e.message,
+          ),
+        );
       } else {
         emit(
           GetProductsFailureState(
@@ -115,22 +131,22 @@ class GlobalCubit extends Cubit<GlobalState> {
   // get Help Data
   Future getHelpData() async {
     emit(GetHelpLoadingState());
-    try {
-      var response = await DioHelper.getData(url: '$kBaseURL$kgetHelp');
-      if (response.statusCode == 200) {
-        HelpResponse helpResponse = HelpResponse.fromJson(response.data);
 
-        if (helpResponse.status == 200) {
-          emit(GetHelpSuccessState(helpResponse.help!));
-        } else {
-          emit(GetHelpFailureState(
-            helpResponse.message,
-          ));
-        }
+    try {
+      // fetch the help data
+      var response = await DioHelper.getData(url: '$kBaseURL$kgetHelp');
+
+      // pass the response to the help response model
+      HelpResponse helpResponse = HelpResponse.fromJson(response.data);
+
+      if (helpResponse.status == 200) {
+        emit(GetHelpSuccessState(helpResponse.help!));
       } else {
-        emit(GetHelpFailureState(
-          'faild to load help page,status code: ${response.statusCode}',
-        ));
+        emit(
+          GetHelpFailureState(
+            helpResponse.message,
+          ),
+        );
       }
     } catch (e) {
       if (e is DioError) {

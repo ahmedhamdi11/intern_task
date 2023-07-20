@@ -20,6 +20,7 @@ class OtpFields extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          // field 1
           SizedBox(
             width: 60,
             height: 60,
@@ -46,54 +47,62 @@ class OtpFields extends StatelessWidget {
               ],
             ),
           ),
+
+          // field 2
           SizedBox(
-              width: 60,
-              height: 60,
-              child: DefaultTextField(
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return '';
-                  } else {
-                    return null;
-                  }
-                },
-                onChanged: (value) {
-                  if (value.length == 1) {
-                    FocusScope.of(context).nextFocus();
-                    cubit.otpField2 = value;
-                  }
-                },
-                hint: '0',
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(1),
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-              )),
+            width: 60,
+            height: 60,
+            child: DefaultTextField(
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return '';
+                } else {
+                  return null;
+                }
+              },
+              onChanged: (value) {
+                if (value.length == 1) {
+                  FocusScope.of(context).nextFocus();
+                  cubit.otpField2 = value;
+                }
+              },
+              hint: '0',
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(1),
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+            ),
+          ),
+
+          // field 3
           SizedBox(
-              width: 60,
-              height: 60,
-              child: DefaultTextField(
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return '';
-                  } else {
-                    return null;
-                  }
-                },
-                onChanged: (value) {
-                  if (value.length == 1) {
-                    FocusScope.of(context).nextFocus();
-                    cubit.otpField3 = value;
-                  }
-                },
-                hint: '0',
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(1),
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-              )),
+            width: 60,
+            height: 60,
+            child: DefaultTextField(
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return '';
+                } else {
+                  return null;
+                }
+              },
+              onChanged: (value) {
+                if (value.length == 1) {
+                  FocusScope.of(context).nextFocus();
+                  cubit.otpField3 = value;
+                }
+              },
+              hint: '0',
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(1),
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+            ),
+          ),
+
+          // field 4
           SizedBox(
             width: 60,
             height: 60,

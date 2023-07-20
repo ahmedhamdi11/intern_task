@@ -79,22 +79,13 @@ class _OtpScreenState extends State<OtpScreen> {
                 BlocConsumer<GlobalCubit, GlobalState>(
                   listener: (context, state) {
                     if (state is OtpFailureState) {
-                      Fluttertoast.showToast(
-                        msg: state.errMessage,
-                        backgroundColor: Colors.red,
-                      );
+                      _onFailureState(state);
                     }
                     if (state is OtpSuccessState) {
-                      Fluttertoast.showToast(
-                        msg: cubit.otpResponse.message,
-                        backgroundColor: AppColor.primaryColor,
-                      );
-                      Navigator.of(context)
-                          .pushNamedAndRemoveUntil('/help', (route) => false);
-                      CacheHelper.saveDataSharedPreference(
-                        key: 'id',
-                        value: cubit.otpResponse.account!.id,
-                      );
+                      // if verify user is success then show the respons message
+                      // and navigate to the help screen
+                      // and save the user data in the cach using the shared prefs
+                      _onSuccessState(state, context);
                     }
                   },
                   builder: (context, state) {
@@ -107,10 +98,10 @@ class _OtpScreenState extends State<OtpScreen> {
                       onTap: () {
                         if (formKey.currentState!.validate()) {
                           cubit.verifyUser(
-                            code: cubit.otpField1! +
-                                cubit.otpField2! +
-                                cubit.otpField3! +
-                                cubit.otpField4!,
+                            code: cubit.otpField1 +
+                                cubit.otpField2 +
+                                cubit.otpField3 +
+                                cubit.otpField4,
                             phoneNumber: widget.phoneNumber,
                           );
                         }
@@ -124,6 +115,39 @@ class _OtpScreenState extends State<OtpScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _onFailureState(OtpFailureState state) {
+    // show the error message in a toast
+    Fluttertoast.showToast(
+      msg: state.errMessage,
+      backgroundColor: Colors.red,
+    );
+  }
+
+  void _onSuccessState(OtpSuccessState state, BuildContext context) {
+    // show the success message in a toast
+    Fluttertoast.showToast(
+      msg: state.response.message,
+      backgroundColor: AppColor.primaryColor,
+    );
+
+    // navigate to the help screen
+    Navigator.of(context).pushNamedAndRemoveUntil('/help', (route) => false);
+
+    // save user data
+    CacheHelper.saveDataSharedPreference(
+      key: 'id',
+      value: state.response.account!.id,
+    );
+    CacheHelper.saveDataSharedPreference(
+      key: 'name',
+      value: state.response.account!.name,
+    );
+    CacheHelper.saveDataSharedPreference(
+      key: 'phone',
+      value: state.response.account!.phone,
     );
   }
 }

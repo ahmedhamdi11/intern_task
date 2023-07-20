@@ -22,7 +22,7 @@ class HomeProductsGridView extends StatelessWidget {
           crossAxisCount: 2,
         ),
         itemBuilder: (context, index) {
-          // return the products title in the first index of the grid view
+          // return Text (Recomended for you) in the first index of the grid view
           if (index == 0) {
             return const IndexedStack(
               index: 0,

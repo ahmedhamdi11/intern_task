@@ -18,14 +18,20 @@ class ProductScreen extends StatelessWidget {
             const SizedBox(
               height: 60.0,
             ),
+
+            // go back button
             const CustomBackButton(),
+
             const SizedBox(
               height: 16.0,
             ),
+
+            // product screen body
             Expanded(
-                child: ProductScreenBody(
-              product: product,
-            )),
+              child: ProductScreenBody(
+                product: product,
+              ),
+            ),
           ],
         ),
       ),

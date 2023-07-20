@@ -1,6 +1,6 @@
 class LoginResponse {
-  final int? status;
-  final String? message;
+  final int status;
+  final String message;
   final String? code;
 
   LoginResponse({
